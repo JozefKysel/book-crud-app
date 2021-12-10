@@ -1,0 +1,57 @@
+import { Model } from 'mongoose';
+import { Book, BookCoreData } from '../../service/book-service/interface';
+import { BookRepository, BookDto } from './interface';
+
+// TODO: proper error handling wouldn't be a bad idea
+export class BookRepositoryImpl implements BookRepository {
+    
+    constructor(
+        private client: Model<Book>, 
+    ) {}
+
+    async getAll(): Promise<Book[]> {
+        const bookDtos = await this.client.find({}).lean();
+        return bookDtos.map(bookDto => this.map(bookDto));
+    };
+
+    async getOneById(id: string): Promise<Book> {
+        const bookDto = await this.client.findOne({id}).lean();
+        
+        if (!bookDto) {
+            throw new Error('Not found');
+        }
+        return this.map(bookDto);
+    };
+    
+    async save(book: BookCoreData): Promise<string> {
+        const savedBook = await this.client.create(book);
+        return savedBook.id;
+    };
+
+    async deleteById(id: string): Promise<void> {
+        await this.client.findOneAndDelete({id}).lean();
+    };
+
+    // TODO: this doesn't seem to work as expected, fix
+    async searchByTitle(title: string): Promise<Book[]> {
+        const bookDtos = await this.client.find({ $text: { 
+            $search: title,
+            $caseSensitive: false,
+        }}).lean();
+        
+        return bookDtos.map(bookDto => this.map(bookDto));
+    }
+
+    // TODO: fix typing
+    private map(bookDto: any): Book {
+        const { __v, _id, ...book } =  bookDto;
+        return { 
+            ...book,
+            authors: book?.authors?.map(
+                ({firstName, lastName}) => ({
+                    firstName,
+                    lastName
+            }))
+        };
+    }
+}
