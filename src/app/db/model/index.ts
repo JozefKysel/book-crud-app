@@ -16,6 +16,6 @@ export const BookSchema = new mongoose.Schema({
     authors: [AuthorSchema]
 });
 
-BookSchema.index({name: 'text', title: 'text'});
+BookSchema.index({ name: 'text', title: 'text' });
 
 export const BookModel = mongoose.model('book', BookSchema);

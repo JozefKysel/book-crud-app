@@ -7,7 +7,6 @@ export default class BookController {
 
     public getAll = async (req: Request, res: Response) => {
         try {
-            console.log("here2")
             const books = await this.bookService.getAll();
             return res.status(200).json(books);       
         } catch (error) {
@@ -18,7 +17,6 @@ export default class BookController {
 
     public getById = async (req: Request, res: Response) => {
         try {
-            console.log("here3")
             const books = await this.bookService.getOneById(req.params.id);
     
             if (!books) {
@@ -33,7 +31,6 @@ export default class BookController {
 
     public saveBook = async (req: Request, res: Response) => {
         try {
-            console.log("here3")
             const savedBook = await this.bookService.save(req.body);
             res.status(201).json(savedBook);
         } catch (error) {

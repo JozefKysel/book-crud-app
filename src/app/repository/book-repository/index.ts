@@ -3,6 +3,7 @@ import { Book, BookCoreData } from '../../service/book-service/interface';
 import { BookRepository, BookDto } from './interface';
 
 // TODO: proper error handling wouldn't be a bad idea
+// TODO: I believe I am not using mongoose as I should - check docs and fix
 export class BookRepositoryImpl implements BookRepository {
     
     constructor(
@@ -40,6 +41,10 @@ export class BookRepositoryImpl implements BookRepository {
         }}).lean();
         
         return bookDtos.map(bookDto => this.map(bookDto));
+    }
+
+    async delete(): Promise<void> {
+        await this.client.deleteMany({});
     }
 
     // TODO: fix typing
