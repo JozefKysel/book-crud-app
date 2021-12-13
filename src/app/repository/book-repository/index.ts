@@ -33,7 +33,7 @@ export class BookRepositoryImpl implements BookRepository {
         await this.client.findOneAndDelete({id}).lean();
     };
 
-    // TODO: this doesn't seem to work as expected, fix
+    // TODO: test case is failing - fix
     async searchByTitle(title: string): Promise<Book[]> {
         const bookDtos = await this.client.find({ $text: { 
             $search: title,

@@ -1,6 +1,7 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import BookServiceImpl from '../../service/book-service';
 
+// TODO: remove console.logs
 export default class BookController {
 
     constructor(private bookService: BookServiceImpl) {}

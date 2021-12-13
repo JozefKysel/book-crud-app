@@ -13,6 +13,7 @@ import mongoose from 'mongoose';
 // - use .env.test instead of hardcoding env variables
 // - fix endpoints for which tests are failing
 // - usage of database and overall test enviroment might be improved
+// - don't use repository class for inserting data into db, use raw model instead
 describe("BookController", () => {
 
     const request = supertest(app);
@@ -124,10 +125,17 @@ describe("BookController", () => {
         });
 
         it('should return 200 and all books with matching title', async () => {
-            const response = await request.get(`/api/v0/search?title=tit`);
+            const response = await request.get(`/api/v0/search?title=title-`);
 
             expect(response.statusCode).toEqual(200);
             expect(response.body).toHaveLength(2);
+        });
+
+        it('should return 200 and 0 books because book with given table does not exists', async () => {
+            const response = await request.get(`/api/v0/search?title=abcd`);
+
+            expect(response.statusCode).toEqual(200);
+            expect(response.body).toHaveLength(0);
         });
     });
 
