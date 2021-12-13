@@ -17,12 +17,12 @@ export default class BookController {
 
     public getById = async (req: Request, res: Response) => {
         try {
-            const books = await this.bookService.getOneById(req.params.id);
+            const book = await this.bookService.getOneById(req.params.id);
     
-            if (!books) {
+            if (!book) {
                 return res.sendStatus(404);
             }
-            return res.status(200).json(books);
+            return res.status(200).json(book);
         } catch (error) {
             console.log(error)
             return res.sendStatus(500);

@@ -38,6 +38,10 @@ describe("BookController", () => {
 
     beforeAll(async () => {
         await mongoose.connect('mongodb://localhost:27017/book-crud-app-db');
+    });
+
+    afterAll(async () => {
+        await mongoose.connection.close();
     })
 
     describe('Get books', () => {
@@ -75,7 +79,8 @@ describe("BookController", () => {
         });
 
         it('should return 404 when book with given id does not exists', async () => {
-            const response = await request.get(`/api/v0/books/non-existing-id`);
+            const randomId = "61b6ef8a85d19a5d6bfbaa6b";
+            const response = await request.get(`/api/v0/books/${randomId}`);
 
             expect(response.statusCode).toEqual(404);
         })
@@ -119,9 +124,10 @@ describe("BookController", () => {
         });
 
         it('should return 200 and all books with matching title', async () => {
-            const response = await request.delete(`/api/v0/search?title=title-`);
+            const response = await request.get(`/api/v0/search?title=tit`);
 
-            expect(response.statusCode).toEqual(204);
+            expect(response.statusCode).toEqual(200);
+            expect(response.body).toHaveLength(2);
         });
     });
 

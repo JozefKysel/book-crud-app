@@ -19,7 +19,7 @@ export class BookRepositoryImpl implements BookRepository {
         const bookDto = await this.client.findOne({id}).lean();
         
         if (!bookDto) {
-            throw new Error('Not found');
+            return;
         }
         return this.map(bookDto);
     };
